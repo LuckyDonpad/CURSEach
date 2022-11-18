@@ -1,8 +1,8 @@
 import pandas as pd
 import functools
-from utils import *
 from environment import Environment
-from generators import *
+from fitness import *
+from evolution import *
 
 if __name__ == '__main__':
 

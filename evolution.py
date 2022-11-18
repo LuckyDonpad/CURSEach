@@ -1,8 +1,9 @@
 import numpy as np
 import random
-import tournament
 from generators import *
-from fitness import *
+from fitness import update_pop_fitness
+import tournament
+
 
 # функция скрещивания индивидов
 # принимает два объекта класса Individ: ind_1 ind_2 и вероятность мутации probability
