@@ -2,7 +2,7 @@ import pandas as pd
 import functools
 from utils import *
 from environment import Environment
-import shapes
+from generators import *
 
 if __name__ == '__main__':
 
