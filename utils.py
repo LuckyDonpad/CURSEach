@@ -4,6 +4,7 @@ from individ import Individ
 import numpy as np
 import random
 import shapes
+import tournament
 
 
 # принимает: геном нейросети - genom - объект класса Genom,
@@ -69,25 +70,6 @@ def update_pop_fitness(individ_pop, fitness_function, environment):
                                    environment=environment)
 
 
-# возвращает наиболее приспособленного индивида из двух ind_1, ind_2
-def binary_tournament(ind_1, ind_2):
-    return ind_1 if ind_1.fitness > ind_2.fitness else ind_2
-
-
-# производит турнирный отбор популяции individ_pop
-# возвращает новую популяцию из тех кто прошел отбор
-# половинного размера от исходной
-def tournament_selection(individ_pop):
-    new_pop = []
-    for i in range(len(individ_pop) // 2):
-        index_1 = random.randint(0, len(individ_pop) - 1)
-        index_2 = random.randint(0, len(individ_pop) - 1)
-        while index_1 == index_2:
-            index_2 = random.randint(0, len(individ_pop) - 1)
-        new_pop.append(binary_tournament(individ_pop[index_1], individ_pop[index_2]))
-    return new_pop
-
-
 # функция скрещивания индивидов
 # принимает два объекта класса Individ: ind_1 ind_2 и вероятность мутации probability
 # возвращает объект класса Individ полученный путем скрещивания и мутации
@@ -97,7 +79,7 @@ def crossingover(ind_1, ind_2, probability):
     new_genom = Genom(
         np.concatenate((ind_1.genom.neurons[0:cross_point_1], ind_2.genom.neurons[cross_point_2: -1])))
     new_genom.mutate(probability)
-    new_model = generate_neural_network_from_genom(new_genom, INPUT_SHAPE, OUT_CLASSES)
+    new_model = generate_neural_network_from_genom(new_genom, shapes.INPUT_SHAPE, shapes.OUT_CLASSES)
     new_individ = Individ(new_genom, new_model)
     return new_individ
 
@@ -133,7 +115,7 @@ def reproduction(individ_pop, crossingover, probability):
 
 def evolve(individ_pop, fitness_func, environment, crossingover, probability):
     update_pop_fitness(individ_pop, fitness_func, environment)
-    individ_pop = tournament_selection(individ_pop)
+    individ_pop = tournament.tournament_selection(individ_pop=individ_pop)
     evolved_pop = reproduction(individ_pop, crossingover, probability)
     update_pop_fitness(evolved_pop, fitness_func, environment)
     return evolved_pop

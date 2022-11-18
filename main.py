@@ -5,7 +5,6 @@ from environment import Environment
 import shapes
 
 if __name__ == '__main__':
-    print(globals())
 
     shapes.INPUT_SHAPE = (9,)  # формат входных данных
     shapes.OUT_CLASSES = 2
@@ -27,12 +26,12 @@ if __name__ == '__main__':
     test_x = np.array(test.drop('Survived', axis='columns'))
 
     # подготовка всех участников эволюции
-    gen_pop = generate_genom_population(20)
+    gen_pop = generate_genom_population(4)
     model_pop = generate_models_population(gen_pop)
     individ_pop = generate_individ_population(gen_pop, model_pop)
     environment = Environment(train_x, train_y, test_x, test_y)
 
-    for _ in range(30):
+    for _ in range(3):
         individ_pop = evolve(individ_pop=individ_pop, fitness_func=get_model_fitness,
                              environment=environment, crossingover=crossingover, probability=1 / 3)
         stats = []
